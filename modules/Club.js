@@ -14,20 +14,26 @@ const ClubSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  managerName: {
-    type: String,
-    required: true
+  presidentName: {
+    type: String
+  },
+  ceoName: {
+    type: String
   },
   startDateActivity: {
     type: Date
   },
   city: {
-    type: String
+    type: String,
+    required: true
   },
   email: {
     type: String
   },
   phoneNum: {
+    type: String
+  },
+  website: {
     type: String
   }
 });

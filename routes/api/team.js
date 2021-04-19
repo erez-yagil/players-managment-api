@@ -92,7 +92,7 @@ router.patch('/:id', async (req, res)=>{
     console.error(error);
 
     if (error.kind == 'ObjectId') return res.status(400).send('No team found');
-    res.status(500).send('Server error')
+    return res.status(500).send('Server error')
   }
 })
 

@@ -11,7 +11,7 @@ const config = require('config');
 router.get('/', auth, async (req, res)=> {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    res.json(user)
+    res.json(user);
 
   } catch(error) {
     console.error(error.message);
@@ -56,10 +56,7 @@ router.post(
         errors:[{ msg:'Invalid email/password2' }]
       })
     }
-
     
-
-
     const payload = {
       user: {
         id: user.id

@@ -5,6 +5,7 @@ const User = require('../../modules/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const auth = require('../../middleware/auth');
 
 // Add user //
 
@@ -34,34 +35,19 @@ router.post(
       normalizeEmail:true,
       toLowerCase:true,
       errorMessage:'Please insert a valid email'
-    },
-    idNumber: {
-      trim:true,
-      isInt:true,
-      isLength: {
-        options:{min:7, max:9}
-      },
-      errorMessage: ' Please insert a valid ID'
-    },
-    gender: {
-    trim:true,
-    toLowerCase:true
-    },
-    city: {
-      trim:true,
-      toLowerCase:true
-      }    
+    }
   })
+
   , async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()){
     return res.status(400).json({ errors:errors.array() })
   }
 
-  const { firstName,lastName,email,idNumber,password,accessLevel,gender,teamNum,payment,dateOfBirth,SportType,city,status } = req.body;
+  const { firstName,lastName,email,idNumber,password,accessLevel } = req.body;
   
   try {
-    let user = await User.findOne({ idNumber });
+    let user = await User.findOne({ email });
 
     if (user) {
       return res.status(400).json({ errors:[{ msg: 'User already exits' }] });
@@ -70,17 +56,9 @@ router.post(
     user = new User({
       firstName,
       lastName,
-      idNumber,
       email,
-      password:idNumber,
-      accessLevel,
-      gender,
-      teamNum,
-      payment,
-      dateOfBirth,
-      SportType,
-      city,
-      status
+      password,
+      accessLevel
     })
 
     const salt  = await bcrypt.genSalt(8);
@@ -142,17 +120,20 @@ router.patch('/:id', async (req, res)=>{
 })
 
 
-// Delete User by id //
+// Delete User && profile by id //
 
-router.delete('/:id', async (req, res)=>{
+router.delete('/user/:id', async (req, res)=>{
   
-
-  try{
+  try {
+    const profile = await Profile.findOneAndRemove({
+      user: req.params.id})
     const user = await User.findByIdAndRemove(req.params.id);
 
     if(!user) return res.status(400).send('No user found');
+    if(!profile) return res.status(400).send('No profile found');
 
     res.send(`User ${user.firstName} ${user.lastName} deleted`);
+    res.send(`profile deleted`);
 
   } catch (error){
     console.error(error);
@@ -161,6 +142,66 @@ router.delete('/:id', async (req, res)=>{
     res.status(500).send('Server error')
   }
 })
+
+// Delete my profile && user //
+
+router.delete('/me', auth, async (req, res)=> {
+  try {
+    const profile = await Profile.findOneAndRemove({
+      user: req.user.id});
+    const user = await User.findOneAndRemove({
+      _id:req.user.id
+    });
+    
+    
+    res.json('user deleted');
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+})
+
+// Get my user //
+
+
+router.get('/me', auth, async (req, res)=> {
+  try {
+    const user = await User.findById(req.user.id);
+    
+    if (!user) {
+      return res.status(400).json({ msg: 'There is no user' })
+    }
+
+    res.json(user);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+})
+
+
+// Get all users user //
+
+router.get('/all', auth, async (req, res)=> {
+  try {
+    const users = await User.find();
+    
+    if (!users) {
+      return res.status(400).json({ msg: 'There is no users' })
+    }
+
+    res.json(users);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+})
+
+
+
 
 
 

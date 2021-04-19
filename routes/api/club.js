@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { checkSchema , validationResult } = require('express-validator');
 const Club = require('../../modules/Club');
+const auth = require('../../middleware/auth');
+
 
 // Add Club //
 
@@ -18,30 +20,31 @@ checkSchema({
   },
   clubNum: {
     trim: true,
+    isInt:true,
     not:true,
     isEmpty:true,
     errorMessage:'Please insert club number'
   },
   amutaNum: {
     trim: true,
+    isInt:true,
     not:true,
     isEmpty:true,
     errorMessage:'Please insert Amuta number'
   },
-  managerName: {
-    trim: true,
-    not:true,
-    isEmpty:true,
+  presidentName: {
     toLowerCase:true,
-    errorMessage:'Please insert manager name'
+    errorMessage:'Please insert a president name'
+
   },
-  email: {
-    trim:true,
-    required:false,
-    isEmail:true,
-    normalizeEmail:true,
+  ceoName: {
     toLowerCase:true,
-    errorMessage:'Please insert a valid email'
+    errorMessage:'Please insert a valid CEO name'
+
+  },
+  startDateActivity: {
+    toDate:true,
+    errorMessage:'Please insert a valid date'
   },
   city: {
     trim: true,
@@ -50,21 +53,42 @@ checkSchema({
     toLowerCase:true,
     errorMessage:'Please insert city'
   },
-  gender: {
-  trim:true,
-  toLowerCase:true
-  },
-  city: {
+  email: {
     trim:true,
-    toLowerCase:true
-    }    
+    required:false,
+    isEmail:true,
+    normalizeEmail:true,
+    toLowerCase:true,
+    errorMessage:'Please insert a valid email'
+  }, 
+  phoneNum: {
+    trim: true,
+    errorMessage:'Please insert a valid phone number'
+
+  },
+  website: {
+    trim:true,
+    errorMessage:'Please insert a valid website'
+
+  }
 }) ,async (req, res)=> {
     const errors = validationResult(req);
     if (!errors.isEmpty()){
     return res.status(400).json({ errors:errors.array() })
     }
 
-    const { clubName,clubNum,amutaNum,managerName,startDateActivity,city,email,phoneNum } = req.body;
+    const { 
+      clubName,
+      clubNum,
+      amutaNum,
+      presidentName,
+      ceoName,
+      startDateActivity,
+      city,
+      email,
+      phoneNum,
+      website
+    } = req.body;
 
     try {
     let club = await Club.findOne({ clubNum });
@@ -75,11 +99,13 @@ checkSchema({
       clubName,
       clubNum,
       amutaNum,
-      managerName,
+      presidentName,
+      ceoName,
       startDateActivity,
       city,
       email,
-      phoneNum
+      phoneNum,
+      website
     })
 
     await club.save();
@@ -141,6 +167,44 @@ router.delete('/:id', async (req, res)=>{
     return res.status(500).send('Server error')
   }
 })
+
+// Get My Club //
+
+router.get('/user/me', async (req, res)=> {
+  try {
+    const club = await Club.findOne({clubNum:req.user.clubNum});
+    
+    if (!club) {
+      return res.status(400).json({ msg: 'There is no club' })
+    }
+
+    res.json(club);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+})
+
+
+// Get All Clubs //
+
+router.get('/', async (req, res)=> {
+  try {
+    const clubs = await Club.find();
+    
+    if (!clubs) {
+      return res.status(400).json({ msg: 'There is no club' })
+    }
+
+    res.json(clubs);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+})
+
 
 
 
