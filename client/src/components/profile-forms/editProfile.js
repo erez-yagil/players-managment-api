@@ -54,7 +54,7 @@ const EditProfile = ({profile: { profile, loading}, createProfile, history, getC
   return ( 
   <Fragment>
       <h5 className="lead text-primary">
-        Create Your Profile
+        Edit Your Profile
       </h5>
       
       <small>* = required field</small>

@@ -10,8 +10,13 @@ import CreateProfile from '../src/components/profile-forms/createProfile';
 import EditProfile from '../src/components/profile-forms/editProfile';
 import UsersInfo from '../src/components/users/Users';
 import clubsInfo from '../src/components/clubs/Clubs';
-import CreateClub from '../src/components/clubs/clubs-Forms/createClub';
-// import EditClub from '../src/components/clubs/clubs-Forms/editClub';
+import AddClubPage from '../src/components/clubs/AddClubPage';
+import EditClubPage from '../src/components/clubs/EditClubPage';
+
+import teamsInfo from '../src/components/teams/Teams';
+import AddTeamPage from '../src/components/teams/AddTeamPage';
+import EditTeamPage from '../src/components/teams/EditTeampage';
+
 
 
 
@@ -52,9 +57,12 @@ const App = () => {
               <PrivateRoute exact path='/create-profile' component={CreateProfile}/>
               <PrivateRoute exact path='/edit-profile' component={EditProfile}/>
               <PrivateRoute exact path='/clubs' component={clubsInfo}/>
-              <PrivateRoute exact path='/add-club' component={CreateClub}/>
-              {/* <PrivateRoute exact path='/edit-club' component={EditClub}/> */}
+              <PrivateRoute exact path='/add-club' component={AddClubPage}/>
+              <PrivateRoute exact path='/edit-club/:id' component={EditClubPage}/>
               <PrivateRoute exact path='/players' component={UsersInfo}/>
+              <PrivateRoute exact path='/teams' component={teamsInfo}/>
+              <PrivateRoute exact path='/add-team' component={AddTeamPage}/>
+              <PrivateRoute exact path='/edit-team/:id' component={EditTeamPage}/>
 
             </Switch>
           </section>

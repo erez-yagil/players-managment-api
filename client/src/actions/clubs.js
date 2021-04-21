@@ -6,20 +6,22 @@ import {
   GET_CLUBS, 
   CLEAR_CLUB,
   CLUB_ERROR
-  
 } from './types';
 
-// Get My Club //
 
-export const getCurrentClub = () => async dispatch => {
+// Get Club by id //
+
+export const getCurrentClub = (clubId) => async dispatch => {
  
   try {
-    const res = await axios.get('/sayfan/club/me');
+    const res = await axios.get(`/sayfan/club/${clubId}`);
     dispatch({
       type:GET_CLUB,
       payload: res.data
     });
-  
+
+    alert('uploaded')
+    
   }catch (err){
     dispatch({
       type:CLUB_ERROR,
@@ -48,7 +50,7 @@ export const getAllClubs = () => async dispatch => {
   }
 };
 
-// Create or Update Profile //
+// Create Club //
 
 export const createClub = (formData, history, edit=false) => async dispatch => {
   try {
@@ -57,9 +59,11 @@ export const createClub = (formData, history, edit=false) => async dispatch => {
         'Content-Type': 'Application/json'
       }
     }
-  
-    const res = await axios.post('/sayfan/club', formData, config);
-  
+
+    let res = await axios.post('/sayfan/club', formData, config);
+
+        
+    console.log(edit)
     dispatch({
       type:GET_CLUB,
       payload: res.data
@@ -84,6 +88,46 @@ export const createClub = (formData, history, edit=false) => async dispatch => {
   }
   };
 
+
+  // Update Club //
+
+  export const updateClub = (formData, history, edit=true, clubId) => async dispatch => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'Application/json'
+        }
+      }
+  
+      const res = await axios.patch(`/sayfan/club/${clubId}`, formData, config);
+  
+          
+      dispatch({
+        type:GET_CLUB,
+        payload: res.data
+      });
+    
+      dispatch(setAlert(edit ? 'Club updated': 'Club created','success'));
+    
+      history.push('/clubs');
+      
+    
+    } catch (err) {
+      const errors = err.response.data.errors;
+    
+       if (errors) {
+       errors.forEach(error => dispatch(setAlert(error.msg,'danger')));
+      }
+    
+      dispatch({
+        type:CLUB_ERROR,
+        payload:{msg:err.response.statusText, status: err.response.status}
+      });
+    }
+    };
+
+
+
   // Delete Club  //
 
   export const deleteClub = (clubId) => async dispatch => {
@@ -106,3 +150,5 @@ export const createClub = (formData, history, edit=false) => async dispatch => {
       }
     }
   };
+
+

@@ -42,7 +42,6 @@ useEffect(() => {
           <th>Gender</th>
           <th>Matches</th>
           <th>Actions</th>
-
         </tr>
       </thead>
       <tbody>{users}</tbody>

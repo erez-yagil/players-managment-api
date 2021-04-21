@@ -5,10 +5,6 @@ const ProfileSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref:'user'
   },
-  club: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref:'club'
-  },
   idNumber: {
     type: String,
     unique:true

@@ -28,6 +28,9 @@ const TeamSchema = new mongoose.Schema({
   },
   coachName: {
     type: String
+  },
+  details: {
+    type: String
   }
 });
 

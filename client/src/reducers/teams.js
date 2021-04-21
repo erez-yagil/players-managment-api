@@ -1,16 +1,16 @@
 /* eslint-disable no-undef */
 /* eslint-disable import/no-anonymous-default-export */
 import { 
-  GET_CLUB, 
-  GET_CLUBS, 
-  CLEAR_CLUB,
-  CLUB_ERROR
+  GET_TEAM, 
+  GET_TEAMS, 
+  CLEAR_TEAM,
+  TEAM_ERROR
     
 } from "../actions/types";
 
 const initialState = {
-  club: null,
-  clubs:[],
+  team: null,
+  teams:[],
   loading: true,
   error:{}
 }
@@ -19,29 +19,29 @@ export default function (state=initialState, action){
   const { type, payload } = action;
 
   switch(type){
-    case GET_CLUB:
+    case GET_TEAM:
       return {
         ...state,
-        club: payload,
+        team: payload,
         loading: false
       }
-    case GET_CLUBS:
+    case GET_TEAMS:
       return {
         ...state,
-        clubs: payload,
+        teams: payload,
         loading: false
       }
-    case CLUB_ERROR:
+    case TEAM_ERROR:
       return {
         ...state,
         error:payload,
         loading:false
       }
-    case CLEAR_CLUB:
-      const newClubs = state.clubs.filter((club)=> club._id !== payload)
+    case CLEAR_TEAM:
+      const newTeams = state.teams.filter((team)=> team._id !== payload)
       return {
         ...state,
-        clubs:newClubs,
+        teams:newTeams,
         loading:false
       }
 

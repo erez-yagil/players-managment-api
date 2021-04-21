@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment,useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createClub } from '../../../actions/clubs';
+import { updateClub } from '../../../actions/clubs';
 
 
-const CreateClub = ({createClub, history}) => {
+const CreateClub = ({club:{ loading }, updateClub, history, clubdata}) => {
   
   const [formDate, setFormDate] = useState({
     clubName:'',
@@ -22,6 +22,21 @@ const CreateClub = ({createClub, history}) => {
     website:''
   });
 
+    
+  useEffect (() => {
+  setFormDate ({
+      clubName:loading || !clubdata.clubName ? '' : clubdata.clubName,
+      clubNum:loading || !clubdata.clubNum ? '' : clubdata.clubNum,
+      amutaNum:loading || !clubdata.amutaNum ? '' : clubdata.amutaNum,
+      presidentName:loading || !clubdata.presidentName ? '' : clubdata.presidentName,
+      ceoName:loading || !clubdata.ceoName ? '' : clubdata.ceoName,
+      startDateActivity:loading || !clubdata.startDateActivity ? '' : clubdata.startDateActivity,
+      city:loading || !clubdata.city ? '' : clubdata.city,
+      email:loading || !clubdata.email ? '' : clubdata.email,
+      phoneNum:loading || !clubdata.phoneNum ? '' : clubdata.phoneNum,
+      website:loading || !clubdata.website ? '' : clubdata.website
+    });
+} , []);
 
   const { clubName,
           clubNum,
@@ -36,10 +51,10 @@ const CreateClub = ({createClub, history}) => {
         } = formDate;
 
   const onChange = e => setFormDate({...formDate, [e.target.name]: e.target.value});
-  
+
   const onSubmit = e => {
     e.preventDefault()
-    createClub(formDate,history) 
+    updateClub(formDate,history,true, clubdata._id) 
   }
   
   return ( 
@@ -128,11 +143,13 @@ const CreateClub = ({createClub, history}) => {
 
 
 CreateClub.propTypes = {
-  createClub:PropTypes.func.isRequired,
-  club:PropTypes.object.isRequired};
+  updateClub:PropTypes.func.isRequired,
+  club:PropTypes.object.isRequired,
+  clubdata:PropTypes.object.isRequired
+};
 
 const mapStateToProps = state =>({
   club:state.club
 })
 
-export default connect(mapStateToProps, { createClub })(withRouter(CreateClub));
+export default connect(mapStateToProps, { updateClub })(withRouter(CreateClub));

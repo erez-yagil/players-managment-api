@@ -24,7 +24,15 @@ export const GET_CLUB = 'GET_CLUB';
 export const GET_CLUBS = 'GET_CLUBS';
 export const CLEAR_CLUB = 'CLEAR_CLUB';
 export const CLUB_ERROR = 'CLUB_ERROR';
-export const DELETE_CLUB = 'DELETE_CLUB';
+
+
+// Team Reducer //
+export const GET_TEAM = 'GET_TEAM';
+export const GET_TEAMS = 'GET_TEAMS';
+export const CLEAR_TEAM = 'CLEAR_TEAM';
+export const TEAM_ERROR = 'TEAM_ERROR';
+
+
 
 
 

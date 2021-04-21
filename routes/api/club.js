@@ -121,12 +121,6 @@ checkSchema({
 // Update Club by id // 
 
 router.patch('/:id', async (req, res)=>{
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ['clubName', 'managerName','city'];
-  const isValidUpdate = updates.every((update) =>
-    allowedUpdates.includes(update));
-
-  if (!isValidUpdate) return res.status(400).send('error: Invalid updates')
   
   try{
     const club = await Club.findByIdAndUpdate(req.params.id, req.body, {
@@ -168,11 +162,11 @@ router.delete('/:id', async (req, res)=>{
   }
 })
 
-// Get My Club //
+// Get Club by Id //
 
-router.get('/user/me', async (req, res)=> {
+router.get('/:id', async (req, res)=> {
   try {
-    const club = await Club.findOne({clubNum:req.user.clubNum});
+    const club = await Club.findById(req.params.id);
     
     if (!club) {
       return res.status(400).json({ msg: 'There is no club' })
