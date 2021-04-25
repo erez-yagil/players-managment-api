@@ -15,12 +15,12 @@ export const getCurrentClub = (clubId) => async dispatch => {
  
   try {
     const res = await axios.get(`/sayfan/club/${clubId}`);
+
     dispatch({
       type:GET_CLUB,
       payload: res.data
     });
 
-    alert('uploaded')
     
   }catch (err){
     dispatch({
@@ -35,7 +35,7 @@ export const getCurrentClub = (clubId) => async dispatch => {
 export const getAllClubs = () => async dispatch => {
  
   try {
-    const res = await axios.get('/sayfan/club');
+    const res = await axios.get(`/sayfan/club`);
     
     dispatch({
       type:GET_CLUBS,
@@ -63,7 +63,6 @@ export const createClub = (formData, history, edit=false) => async dispatch => {
     let res = await axios.post('/sayfan/club', formData, config);
 
         
-    console.log(edit)
     dispatch({
       type:GET_CLUB,
       payload: res.data
@@ -150,5 +149,21 @@ export const createClub = (formData, history, edit=false) => async dispatch => {
       }
     }
   };
+  
 
+  export const clearClub = () => async dispatch => {
+ 
+    try {
+    
+      dispatch({
+        type:CLEAR_CLUB
+      });
+        
+    }catch (err){
+      dispatch({
+        type:CLUB_ERROR,
+        payload:{msg:err.response.statusText, status: err.response.status}
+      });
+    }
+  };
 

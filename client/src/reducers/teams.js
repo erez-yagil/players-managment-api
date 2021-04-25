@@ -41,8 +41,9 @@ export default function (state=initialState, action){
       const newTeams = state.teams.filter((team)=> team._id !== payload)
       return {
         ...state,
+        team:[],
         teams:newTeams,
-        loading:false
+        loading:true
       }
 
     default:

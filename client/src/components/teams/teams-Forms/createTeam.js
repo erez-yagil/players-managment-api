@@ -7,15 +7,23 @@ import { connect } from 'react-redux';
 import { createTeam } from '../../../actions/teams';
 
 
-const CreateTeam = ({createTeam, history}) => {
+
+const CreateTeam = ({createTeam, history, club:{ club }, toClub}) => {
   
+  let currentClub = ''
+
+  if (toClub){
+    currentClub = club.clubNum;
+  } 
+  
+
   const [formDate, setFormDate] = useState({
     teamName:'',
     teamCategory:'',
     teamNum:'',
     ligueLevel:'',
     ageCategory:'',
-    clubNum:'',
+    clubNum:currentClub,
     coachName:'',
     details :''
 
@@ -32,12 +40,13 @@ const CreateTeam = ({createTeam, history}) => {
           details
         } = formDate;
 
-  const onChange = e => setFormDate({...formDate, [e.target.name]: e.target.value});
+  const onChange = e => setFormDate({...formDate,clubNum:currentClub, [e.target.name]: e.target.value});
   
   const onSubmit = e => {
     e.preventDefault()
     createTeam(formDate,history) 
   }
+
   
   return ( 
   <Fragment>      
@@ -80,13 +89,23 @@ const CreateTeam = ({createTeam, history}) => {
         </small>
           <input type="text" name="ageCategory" value={ageCategory} onChange={e =>onChange(e)} />
         </div>
-
+        
+        {toClub ?
+        <div className="form-group">
+        <small class="form-text">
+        Club Number
+        </small>
+          <input type="text" name="clubNum" value={currentClub} readOnly={true}/>
+        </div>
+         :
+      
         <div className="form-group">
         <small class="form-text">
         Club Number
         </small>
           <input type="text" name="clubNum" value={clubNum} onChange={e =>onChange(e)} />
         </div>
+        }
         
         <div className="form-group">
         <small class="form-text">
@@ -118,7 +137,8 @@ CreateTeam.propTypes = {
 };
 
 const mapStateToProps = state =>({
-  team:state.team
+  team:state.team,
+  club:state.club
 })
 
 export default connect(mapStateToProps, { createTeam })(withRouter(CreateTeam));

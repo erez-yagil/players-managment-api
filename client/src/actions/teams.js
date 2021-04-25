@@ -11,10 +11,30 @@ import {
 
 // Get My Team //
 
-export const getCurrentTeam = () => async dispatch => {
+export const getMyTeam = () => async dispatch => {
  
   try {
     const res = await axios.get('/sayfan/team/me');
+    dispatch({
+      type:GET_TEAM,
+      payload: res.data
+    });
+  
+  }catch (err){
+    dispatch({
+      type:TEAM_ERROR,
+      payload:{msg:err.response.statusText, status: err.response.status}
+    });
+  }
+};
+
+
+// Get Team By Id //
+
+export const getCurrentTeam = (teamId) => async dispatch => {
+ console.log(teamId);
+  try {
+    const res = await axios.get(`/sayfan/team/${teamId}`);
     dispatch({
       type:GET_TEAM,
       payload: res.data
@@ -145,3 +165,21 @@ export const updateTeam = (formData, history, edit=true, teamId) => async dispat
       }
     }
   };
+
+  // Clear Team  //
+
+  export const clearTeam = () => async dispatch => {
+      try {
+
+        dispatch({
+          type: CLEAR_TEAM
+        })
+
+      }catch(err) {
+        dispatch ({
+          type: TEAM_ERROR,
+          payload: { msg: err.response.statusText, status: err.response.status}
+        });
+      }
+    };
+  

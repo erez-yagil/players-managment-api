@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Login from './components/auth/Login';
-import Register from './components/auth/Register';
 import Alert from './components/layout/alert';
 import Dashboard from '../src/components/dashboard/dashboard';
-import CreateProfile from '../src/components/profile-forms/createProfile';
-import EditProfile from '../src/components/profile-forms/editProfile';
-import UsersInfo from '../src/components/users/Users';
+import UsersInfo from '../src/components/players/Players';
+import AddPlayerPage from '../src/components/players/AddPlayerPage';
+import EditPlayerPage from '../src/components/players/EditPlayerPage';
+
 import clubsInfo from '../src/components/clubs/Clubs';
 import AddClubPage from '../src/components/clubs/AddClubPage';
 import EditClubPage from '../src/components/clubs/EditClubPage';
@@ -16,10 +16,6 @@ import EditClubPage from '../src/components/clubs/EditClubPage';
 import teamsInfo from '../src/components/teams/Teams';
 import AddTeamPage from '../src/components/teams/AddTeamPage';
 import EditTeamPage from '../src/components/teams/EditTeampage';
-
-
-
-
 
 
 import PrivateRoute from '../src/components/routing/PrivateRoute';
@@ -52,16 +48,17 @@ const App = () => {
             <Alert />
             <Switch>
               <Route exact path='/Login' component={Login}/>
-              <Route exact path='/register' component={Register}/>
               <PrivateRoute exact path='/dashboard' component={Dashboard}/>
-              <PrivateRoute exact path='/create-profile' component={CreateProfile}/>
-              <PrivateRoute exact path='/edit-profile' component={EditProfile}/>
               <PrivateRoute exact path='/clubs' component={clubsInfo}/>
               <PrivateRoute exact path='/add-club' component={AddClubPage}/>
               <PrivateRoute exact path='/edit-club/:id' component={EditClubPage}/>
               <PrivateRoute exact path='/players' component={UsersInfo}/>
+              <PrivateRoute exact path='/add-player' component={AddPlayerPage}/>
+              <PrivateRoute exact path='/addplayertoteam/:id' component={AddPlayerPage}/>
+              <PrivateRoute exact path='/edit-player' component={EditPlayerPage}/>
               <PrivateRoute exact path='/teams' component={teamsInfo}/>
               <PrivateRoute exact path='/add-team' component={AddTeamPage}/>
+              <PrivateRoute exact path='/addteamtoclub/:id' component={AddTeamPage}/>
               <PrivateRoute exact path='/edit-team/:id' component={EditTeamPage}/>
 
             </Switch>

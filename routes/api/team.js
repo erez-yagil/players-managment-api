@@ -89,7 +89,7 @@ checkSchema({
         })
 
     await team.save();
-    res.send('Team added')
+    res.send(team)
 
   } catch (error){
     console.error(error);
@@ -179,6 +179,24 @@ router.get('/me', auth, async (req, res)=> {
     }
 
     res.json(teams);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+})
+
+// Get Team By Id //
+
+router.get('/:id', async (req, res)=> {
+  try {
+    const team = await Team.findById(req.params.id);
+    
+    if (!team) {
+      return res.status(400).json({ msg: 'There is no teams' })
+    }
+
+    res.json(team);
 
   } catch(error) {
     console.error(error.message);

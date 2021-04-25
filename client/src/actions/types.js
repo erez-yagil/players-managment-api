@@ -11,14 +11,6 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOG_OUT = 'LOG_OUT';
 
 
-// Profile Reducer //
-export const GET_PROFILE = 'GET_PROFILE';
-export const GET_PROFILES = 'GET_PROFILES';
-export const PROFILE_ERROR = 'PROFILE_ERROR';
-export const CLEAR_PROFILE = 'CLEAR_PROFILE';
-export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
-
-
 // Club Reducer //
 export const GET_CLUB = 'GET_CLUB';
 export const GET_CLUBS = 'GET_CLUBS';
@@ -31,6 +23,14 @@ export const GET_TEAM = 'GET_TEAM';
 export const GET_TEAMS = 'GET_TEAMS';
 export const CLEAR_TEAM = 'CLEAR_TEAM';
 export const TEAM_ERROR = 'TEAM_ERROR';
+
+
+// Player Reducer //
+export const GET_PLAYER = 'GET_PLAYER';
+export const GET_PLAYERS = 'GET_PLAYERS';
+export const CLEAR_PLAYER = 'CLEAR_PLAYER';
+export const PLAYER_ERROR = 'PLAYER_ERROR';
+
 
 
 

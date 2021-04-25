@@ -20,6 +20,15 @@ export const EditTeamForm = ({teamid}) => {
   )
 }
 
+export const AddPlayerToTeam = ({teamid}) => {
+  return (
+    <div className="dash-buttons">
+        <Link to={`/addplayertoteam/${teamid}`} className="btn btn-light"
+          ><i className=" text-primary"></i>Add Players</Link>
+    </div>
+  )
+}
+
 
 
 

@@ -43,7 +43,6 @@ import {
       case AUTH_ERROR:
       case LOGIN_FAIL:
       case LOG_OUT:
-      case DELETE_ACCOUNT:
         localStorage.removeItem('token');
         return{
             ...state,

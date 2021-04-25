@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { getAllTeams, deleteTeam } from '../../actions/teams'
+import { getAllTeams, deleteTeam, clearTeam } from '../../actions/teams'
 import { connect } from 'react-redux';
-import {AddTeamForm, EditTeamForm} from './teamActions';
+import {AddTeamForm, EditTeamForm, AddPlayerToTeam} from './teamActions';
 
-const TeamInfo = ({ team:{ teams }, getAllTeams, deleteTeam }) => {
+const TeamInfo = ({ team:{ teams }, getAllTeams, deleteTeam, clearTeam }) => {
 
   useEffect(() => {
+    clearTeam();
     getAllTeams();
   }, []);
   
@@ -36,6 +37,7 @@ const TeamInfo = ({ team:{ teams }, getAllTeams, deleteTeam }) => {
           <td>{team._id}</td>
           <td></td>
           <td>
+            <AddPlayerToTeam teamid={team._id}/>
           <EditTeamForm teamid={team._id}/>
           <button onClick={()=>deleteTeam(team._id)}>Delete</button>
           </td>
@@ -49,7 +51,8 @@ const TeamInfo = ({ team:{ teams }, getAllTeams, deleteTeam }) => {
 
 TeamInfo.propTypes = {
   getAllTeams:PropTypes.func.isRequired,
-  deleteTeam:PropTypes.func.isRequired
+  deleteTeam:PropTypes.func.isRequired,
+  clearTeam:PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -57,4 +60,4 @@ const mapStateToProps = state => ({
   team: state.team
 });
 
-export default connect( mapStateToProps , {getAllTeams, deleteTeam} )(TeamInfo);
+export default connect( mapStateToProps , {getAllTeams, deleteTeam, clearTeam} )(TeamInfo);

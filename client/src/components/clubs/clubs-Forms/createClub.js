@@ -4,10 +4,12 @@ import React, { useState, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createClub } from '../../../actions/clubs';
+import { createClub, getCurrentClub } from '../../../actions/clubs';
 
 
 const CreateClub = ({createClub, history}) => {
+
+  getCurrentClub('608450f29caabd5b0c58d82f');
   
   const [formDate, setFormDate] = useState({
     clubName:'',

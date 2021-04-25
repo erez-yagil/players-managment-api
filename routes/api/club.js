@@ -55,8 +55,6 @@ checkSchema({
   },
   email: {
     trim:true,
-    required:false,
-    isEmail:true,
     normalizeEmail:true,
     toLowerCase:true,
     errorMessage:'Please insert a valid email'
@@ -109,7 +107,7 @@ checkSchema({
     })
 
     await club.save();
-    res.send('Club added')
+    res.send(club)
 
 
   } catch (error){
@@ -162,6 +160,7 @@ router.delete('/:id', async (req, res)=>{
   }
 })
 
+
 // Get Club by Id //
 
 router.get('/:id', async (req, res)=> {
@@ -198,8 +197,6 @@ router.get('/', async (req, res)=> {
     res.status(500).send('Server Error')
   }
 })
-
-
 
 
 module.exports = router;

@@ -21,9 +21,6 @@ const landing = ({ isAuth }) => {
           <Link to="/login" className="btn btn-success">
             Login
           </Link>
-          <Link to="/register" className="btn btn-success">
-          register
-          </Link>
         </div>
       </div>
     </div>

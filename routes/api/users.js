@@ -29,25 +29,71 @@ router.post(
       toLowerCase:true,
       errorMessage:'Please insert last name'
     },
+    idNumber: {
+      trim: true,
+      not:true,
+      isEmpty:true,
+      errorMessage:'Please insert ID Number' 
+    },
+    password: {
+      trim:true,
+      not:true,
+      isEmpty:true,
+      errorMessage:'Please insert a valid password'
+    },
     email: {
       trim:true,
-      isEmail:true,
       normalizeEmail:true,
-      toLowerCase:true,
       errorMessage:'Please insert a valid email'
+    },
+    accessLevel: {
+      trim:true,
+      errorMessage:'Please insert a valid Access Level'
+    },
+    gender: {
+      errorMessage:'Please pick gender'
+    },
+    teamNum: {
+      errorMessage:'Please pick a Team'
+    },
+    dateOfBirth: {
+      toDate:true
+    },
+    city: {
+      trim:true,
+      toLowerCase:true
+    },
+    date: {
+      trim:true,
+      toDate:true,
+      errorMessage:'Please insert a valid Date'
     }
-  })
+    
+  }) ,
 
-  , async (req, res) => {
+  async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()){
     return res.status(400).json({ errors:errors.array() })
   }
 
-  const { firstName,lastName,email,idNumber,password,accessLevel } = req.body;
+  const {
+          firstName,
+          lastName,
+          email,
+          idNumber,
+          password,
+          accessLevel,
+          gender,
+          teamNum,
+          payment,
+          dateOfBirth,
+          city,
+          status
+        } = req.body;
   
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ idNumber });
 
     if (user) {
       return res.status(400).json({ errors:[{ msg: 'User already exits' }] });
@@ -57,9 +103,16 @@ router.post(
       firstName,
       lastName,
       email,
+      idNumber,
       password,
-      accessLevel
-    })
+      accessLevel,
+      gender,
+      teamNum,
+      payment,
+      dateOfBirth,
+      city,
+      status
+         })
 
     const salt  = await bcrypt.genSalt(8);
     user.password = await bcrypt.hash('user-password', salt)
@@ -93,12 +146,6 @@ router.post(
 // Update User by id //
 
 router.patch('/:id', async (req, res)=>{
-  const updates = Object.keys(req.body);
-  const allowedUpdates = ['firstName', 'lastName'];
-  const isValidUpdate = updates.every((update) =>
-    allowedUpdates.includes(update));
-
-  if (!isValidUpdate) return res.status(400).send('error: Invalid updates')
   
   try{
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -120,45 +167,22 @@ router.patch('/:id', async (req, res)=>{
 })
 
 
-// Delete User && profile by id //
+// Delete User by id //
 
-router.delete('/user/:id', async (req, res)=>{
+router.delete('/:id', async (req, res)=>{
   
   try {
-    const profile = await Profile.findOneAndRemove({
-      user: req.params.id})
     const user = await User.findByIdAndRemove(req.params.id);
 
     if(!user) return res.status(400).send('No user found');
-    if(!profile) return res.status(400).send('No profile found');
 
     res.send(`User ${user.firstName} ${user.lastName} deleted`);
-    res.send(`profile deleted`);
 
   } catch (error){
     console.error(error);
 
     if (error.kind == 'ObjectId') return res.status(400).send('No user found');
     res.status(500).send('Server error')
-  }
-})
-
-// Delete my profile && user //
-
-router.delete('/me', auth, async (req, res)=> {
-  try {
-    const profile = await Profile.findOneAndRemove({
-      user: req.user.id});
-    const user = await User.findOneAndRemove({
-      _id:req.user.id
-    });
-    
-    
-    res.json('user deleted');
-
-  } catch(error) {
-    console.error(error.message);
-    res.status(500).send('Server Error')
   }
 })
 
@@ -181,10 +205,28 @@ router.get('/me', auth, async (req, res)=> {
   }
 })
 
+// Get User by Id //
 
-// Get all users user //
+router.get('/:id', async (req, res)=> {
+  try {
+    const user = await User.findById(req.params.id);
+    
+    if (!user) {
+      return res.status(400).json({ msg: 'There is no user' })
+    }
 
-router.get('/all', auth, async (req, res)=> {
+    res.json(user);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+});
+
+
+// Get all users //
+
+router.get('/', async (req, res)=> {
   try {
     const users = await User.find();
     
@@ -198,7 +240,7 @@ router.get('/all', auth, async (req, res)=> {
     console.error(error.message);
     res.status(500).send('Server Error')
   }
-})
+});
 
 
 

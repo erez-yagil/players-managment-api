@@ -1,16 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { getAllClubs, deleteClub } from '../../actions/clubs'
+import { getAllClubs, deleteClub, clearClub } from '../../actions/clubs'
 import { connect } from 'react-redux';
-import {AddClubForm, EditClubForm} from './ClubActions';
+import {AddClubForm, EditClubForm, AddTeamToClub} from './ClubActions';
 
-const ClubInfo = ({ club:{ clubs }, getAllClubs, deleteClub }) => {
+const ClubInfo = ({ club:{ clubs }, getAllClubs, deleteClub, clearClub, auth: { user } }) => {
 
   useEffect(() => {
+    clearClub();
     getAllClubs();
   }, []);
-  
+
+ 
+
 
   return (
     <Fragment>
@@ -36,8 +39,9 @@ const ClubInfo = ({ club:{ clubs }, getAllClubs, deleteClub }) => {
           <td>{club._id}</td>
           <td></td>
           <td>
-          <EditClubForm clubid={club._id}/>
-          <button onClick={()=>deleteClub(club._id)}>Delete</button>
+          <EditClubForm clubid={club._id} />
+          <AddTeamToClub clubid={club._id} />
+          <button onClick={()=>deleteClub(club._id)} className='btn btn-light'>Delete</button>
           </td>
         </tr>
         ))}
@@ -49,12 +53,15 @@ const ClubInfo = ({ club:{ clubs }, getAllClubs, deleteClub }) => {
 
 ClubInfo.propTypes = {
   getAllClubs:PropTypes.func.isRequired,
-  deleteClub:PropTypes.func.isRequired
+  clearClub:PropTypes.func.isRequired,
+  deleteClub:PropTypes.func.isRequired,
+  auth:PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
   profile :state.profile,
-  club: state.club
+  club: state.club,
+  auth:state.auth
 });
 
-export default connect( mapStateToProps , {getAllClubs, deleteClub} )(ClubInfo);
+export default connect( mapStateToProps , {getAllClubs, deleteClub, clearClub} )(ClubInfo);

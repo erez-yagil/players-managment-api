@@ -264,6 +264,10 @@ button {
   font: inherit;
 }
 
+input:read-only {
+  background-color: rgb(219, 219, 216);
+}
+
 .form .social-input {
   display: flex;
 }
