@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
+import HelpButton from './help/helpButton';
 
 const Navbar = ({auth:{isAuth, loading},logout}) => {
+
+
 
   const authLinks = (
     <Fragment>
@@ -22,13 +25,16 @@ const Navbar = ({auth:{isAuth, loading},logout}) => {
             <li>
               <Link to="/players">Players</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/matches">Matches</Link>
-            </li>
+            </li> */}
           </ul>
       </div>
       <div>
           <ul>
+          <li>
+            <HelpButton />
+          </li>
           <li>
             <a onClick={logout} href="/">
               <i className="fas fa-sign-out-alt"></i>
@@ -49,24 +55,24 @@ const Navbar = ({auth:{isAuth, loading},logout}) => {
             Login
           </Link>
           </li>
-        <li>
-          <Link to='/help'>
-            help
-          </Link>
+          <li>
+            <HelpButton />
           </li>
+          
       </ul>
   );
 
   return (
     <nav className="navbar bg-dark">
       <h1>
-        <Link to='/'>
+        <Link to='/dashboard'>
            Sayfan <i className="fas fa-football-ball"></i>
         </Link>
       </h1>
       {!loading && (<Fragment>{isAuth? authLinks: guestLinks} </Fragment>)}
       
     </nav>
+    
   )
 }
 

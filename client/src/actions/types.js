@@ -30,6 +30,12 @@ export const GET_PLAYER = 'GET_PLAYER';
 export const GET_PLAYERS = 'GET_PLAYERS';
 export const CLEAR_PLAYER = 'CLEAR_PLAYER';
 export const PLAYER_ERROR = 'PLAYER_ERROR';
+export const GET_PLAYERS_BY_TEAM = 'GET_PLAYERS_BY_TEAM';
+
+
+// Player Reducer //
+export const SEND_MESSAGE_SUCCESS = 'SEND_MESSAGE_SUCCESS';
+export const SEND_MESSAGE_FAIL = 'SEND_MESSAGE_FAIL';
 
 
 

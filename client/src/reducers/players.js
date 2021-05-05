@@ -2,7 +2,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { 
   GET_PLAYER, 
-  GET_PLAYERS, 
+  GET_PLAYERS,
+  GET_PLAYERS_BY_TEAM,
   CLEAR_PLAYER,
   PLAYER_ERROR
     
@@ -11,7 +12,8 @@ import {
 const initialState = {
   player: null,
   players:[],
-  loading: true,
+  playersByTeam:[],
+  playerLoading: true,
   error:{}
 }
 
@@ -23,27 +25,33 @@ export default function (state=initialState, action){
       return {
         ...state,
         player: payload,
-        loading: false
+        playerLoading: false
       }
     case GET_PLAYERS:
       return {
         ...state,
         players: payload,
-        loading: false
+        playerLoading: false
       }
-    case CLEAR_PLAYER:
+      case GET_PLAYERS_BY_TEAM:
+      return {
+        ...state,
+        playersByTeam: payload,
+        playerLoading: false
+      }
+    case PLAYER_ERROR:
       return {
         ...state,
         error:payload,
-        loading:false
+        playerLoading:true
       }
-    case PLAYER_ERROR:
+    case CLEAR_PLAYER:
       const newPlayers = state.players.filter((player)=> player._id !== payload)
       return {
         ...state,
         player:[],
         players:newPlayers,
-        loading:true
+        playerLoading:false
       }
 
     default:

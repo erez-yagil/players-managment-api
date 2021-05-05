@@ -8,21 +8,19 @@ import {getCurrentTeam} from '../../actions/teams';
 import Spinner from '../layout/spinner';
 
 
-const AddPlayerPage = ({match, getCurrentTeam,  team:{ team, loading }}) => {
+const AddPlayerPage = ({match, getCurrentTeam,  team:{ team }}) => {
 
   const teamId = match.params.id;
-
-
 
   useEffect(() => {
     getCurrentTeam(teamId)
   }, []);
 
   if (teamId) {
-    return teamId && loading === null ? <Spinner/> :
+    return teamId === null ? <Spinner/> :
     (
       <Fragment>
-        <h1>Add Player to team: {team.teamName}</h1>
+        <h1 className="large">Add new player to team: {team.teamName}</h1>
          <CreatePlayer toTeam={true}/>
       </Fragment>
         )
@@ -30,7 +28,7 @@ const AddPlayerPage = ({match, getCurrentTeam,  team:{ team, loading }}) => {
   
   return (
   <Fragment>
-    <h1>Add Player</h1>
+    <h1 className="large">Add new player</h1>
     <CreatePlayer />
   </Fragment>
   )
@@ -45,6 +43,6 @@ AddPlayerPage.propTypes = {
 
 const mapStateToProps = state =>({
   team:state.team
-})
+});
 
 export default connect(mapStateToProps, { getCurrentTeam })(AddPlayerPage)

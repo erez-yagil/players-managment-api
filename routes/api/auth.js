@@ -71,7 +71,7 @@ router.post(
         if(error){
           throw error
         }
-        res.json({ token })
+        res.json({ token, user })
       }
     );
 
@@ -79,9 +79,6 @@ router.post(
     console.error(e);
     res.status(500).send('Server error')
   }
-
-
- console.log(req.body)
 })
 
 

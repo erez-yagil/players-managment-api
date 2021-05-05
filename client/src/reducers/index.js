@@ -4,6 +4,7 @@ import auth from './auth';
 import club from './clubs';
 import team from './teams';
 import player from './players';
+import contactUs from './contactUs';
 
 
 
@@ -13,5 +14,6 @@ export default combineReducers({
   auth,
   club,
   team,
-  player
+  player,
+  contactUs  
 });

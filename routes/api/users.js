@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const router = express.Router();
 const { checkSchema , validationResult } = require('express-validator');
 const User = require('../../modules/User');
@@ -7,10 +8,10 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const auth = require('../../middleware/auth');
 
-// Add user //
+// Add Player //
 
 router.post(
-  '/',
+  '/player',
 
   // user input validation //
 
@@ -43,7 +44,7 @@ router.post(
     },
     email: {
       trim:true,
-      normalizeEmail:true,
+      isEmail:true,
       errorMessage:'Please insert a valid email'
     },
     accessLevel: {
@@ -53,13 +54,23 @@ router.post(
     gender: {
       errorMessage:'Please pick gender'
     },
+    clubNum: {
+      errorMessage:'Please pick a Club'
+    },
     teamNum: {
       errorMessage:'Please pick a Team'
     },
     dateOfBirth: {
-      toDate:true
+      toDate:true,
+      not:true,
+      isEmpty:true,
+      errorMessage:'Please provide Date of birth'
     },
     city: {
+      trim:true,
+      toLowerCase:true
+    },
+    details:{
       trim:true,
       toLowerCase:true
     },
@@ -68,7 +79,6 @@ router.post(
       toDate:true,
       errorMessage:'Please insert a valid Date'
     }
-    
   }) ,
 
   async (req, res) => {
@@ -85,11 +95,15 @@ router.post(
           password,
           accessLevel,
           gender,
+          clubNum,
           teamNum,
           payment,
           dateOfBirth,
           city,
-          status
+          status,
+          medicalTest,
+          medicalTestFile,
+          details
         } = req.body;
   
   try {
@@ -107,12 +121,16 @@ router.post(
       password,
       accessLevel,
       gender,
+      clubNum,
       teamNum,
       payment,
       dateOfBirth,
       city,
-      status
-         })
+      status,
+      medicalTest,
+      medicalTestFile,
+      details
+      })
 
     const salt  = await bcrypt.genSalt(8);
     user.password = await bcrypt.hash('user-password', salt)
@@ -145,7 +163,7 @@ router.post(
 
 // Update User by id //
 
-router.patch('/:id', async (req, res)=>{
+router.patch('/player/:id', async (req, res)=>{
   
   try{
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -169,7 +187,7 @@ router.patch('/:id', async (req, res)=>{
 
 // Delete User by id //
 
-router.delete('/:id', async (req, res)=>{
+router.delete('/player/:id', async (req, res)=>{
   
   try {
     const user = await User.findByIdAndRemove(req.params.id);
@@ -189,7 +207,7 @@ router.delete('/:id', async (req, res)=>{
 // Get my user //
 
 
-router.get('/me', auth, async (req, res)=> {
+router.get('/player/me', auth, async (req, res)=> {
   try {
     const user = await User.findById(req.user.id);
     
@@ -207,7 +225,7 @@ router.get('/me', auth, async (req, res)=> {
 
 // Get User by Id //
 
-router.get('/:id', async (req, res)=> {
+router.get('/player/:id', async (req, res)=> {
   try {
     const user = await User.findById(req.params.id);
     
@@ -226,10 +244,44 @@ router.get('/:id', async (req, res)=> {
 
 // Get all users //
 
-router.get('/', async (req, res)=> {
+router.get('/player', async (req, res)=> {
   try {
-    const users = await User.find();
+    const users = await User.find({accessLevel:1});
     
+    if (!users) {
+      return res.status(400).json({ msg: 'There is no users' })
+    }
+
+    res.json(users);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+});
+
+// Get users By Club Number //
+
+router.get('/player/club/:clubNum', async (req, res)=> {
+  try {
+    const users = await User.find({clubNum: req.params.clubNum,accessLevel:1});
+    if (!users) {
+      return res.status(400).json({ msg: 'There is no users' })
+    }
+
+    res.json(users);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+});
+
+// Get users By Team Number //
+
+router.get('/player/team/:teamNum', async (req, res)=> {
+  try {
+    const users = await User.find({teamNum: req.params.teamNum, accessLevel:1});
     if (!users) {
       return res.status(400).json({ msg: 'There is no users' })
     }
@@ -244,8 +296,22 @@ router.get('/', async (req, res)=> {
 
 
 
+router.post('/player/upload', (req, res)=> {
+  if (req.files === null){
+   return res.status(400).json({msg:'no files'});
+  };
 
+  const file = req.files.file;
 
+  file.mv(`${__dirname}/../../client/public/uploads/${file.name}`, err => {
+    if (err){
+      console.error(err);
+      return res.status(500).send(err);
+    }
+      console.log(file)
+     res.json({ fileName: file.name, filePath:`/uploads/${file.name}`});
+  });
+});
 
 
 module.exports = router;

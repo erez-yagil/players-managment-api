@@ -179,6 +179,25 @@ router.get('/:id', async (req, res)=> {
   }
 })
 
+// Get my club //
+
+router.get('/me/:clubNum', async (req, res)=> {
+  try {
+    const club = await Club.findOne({ clubNum:req.params.clubNum });
+
+    if (!club) {
+      return res.status(400).json({ msg: 'There is no club' })
+    }
+
+    res.json(club);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+})
+
+
 
 // Get All Clubs //
 

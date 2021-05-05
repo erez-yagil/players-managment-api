@@ -11,7 +11,7 @@ import {
 const initialState = {
   team: null,
   teams:[],
-  loading: true,
+  teamLoading: true,
   error:{}
 }
 
@@ -23,19 +23,19 @@ export default function (state=initialState, action){
       return {
         ...state,
         team: payload,
-        loading: false
+        teamLoading: false
       }
     case GET_TEAMS:
       return {
         ...state,
         teams: payload,
-        loading: false
+        teamLoading: false
       }
     case TEAM_ERROR:
       return {
         ...state,
         error:payload,
-        loading:false
+        teamLoading:false
       }
     case CLEAR_TEAM:
       const newTeams = state.teams.filter((team)=> team._id !== payload)
@@ -43,7 +43,7 @@ export default function (state=initialState, action){
         ...state,
         team:[],
         teams:newTeams,
-        loading:true
+        teamLoading:true
       }
 
     default:

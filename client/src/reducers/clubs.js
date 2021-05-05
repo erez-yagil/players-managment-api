@@ -9,9 +9,9 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  club: null,
+  club:[] ,
   clubs:[],
-  loading: true,
+  clubLoading: true,
   error:{}
 }
 
@@ -23,19 +23,19 @@ export default function (state=initialState, action){
       return {
         ...state,
         club: payload,
-        loading: false,
+        clubLoading: false,
       }
     case GET_CLUBS:
       return {
         ...state,
         clubs: payload,
-        loading: false
+        clubLoading: false
       }
     case CLUB_ERROR:
       return {
         ...state,
         error:payload,
-        loading:false
+        clubLoading:false
       }
     case CLEAR_CLUB:
       const newClubs = state.clubs.filter((club)=> club._id !== payload)
@@ -43,7 +43,7 @@ export default function (state=initialState, action){
         ...state,
         club:[],
         clubs:newClubs,
-        loading:true
+        clubLoading:true
       }
 
     default:

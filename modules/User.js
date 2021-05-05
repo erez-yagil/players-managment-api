@@ -25,16 +25,21 @@ const UserSchema = new mongoose.Schema({
   gender: {
     type: String
   },
+  clubNum:{
+    type:Number,
+    required:true
+  },
   teamNum:{
     type:Number,
     required:true
   },
   payment: {
     type:Number,
-    default: 0
+    default: 2
   },
   dateOfBirth: {
-    type: Date
+    type: Date,
+    required:true
   },
   city: {
     type: String
@@ -44,7 +49,17 @@ const UserSchema = new mongoose.Schema({
   },
   status: {
     type:Number,
-    default: 0
+    default: 2
+  },
+  medicalTest: {
+    type:Number,
+    default: 2
+  },
+  medicalTestFile: {
+  type:String
+  },
+  details: {
+    type: String
   },
   date: {
     type: Date,

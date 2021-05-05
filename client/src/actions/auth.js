@@ -42,7 +42,7 @@ import {
     const body = JSON.stringify({ email, password });
     try{
       const res = await axios.post('sayfan/auth', body, config)
-
+      
       dispatch({
         type:LOGIN_SUCCESS,
         payload: res.data

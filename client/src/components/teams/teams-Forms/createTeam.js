@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useState, Fragment } from 'react';
+import React, { useState ,useEffect, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createTeam } from '../../../actions/teams';
+import {getCurrentClub} from '../../../actions/clubs';
 
 
 
-const CreateTeam = ({createTeam, history, club:{ club }, toClub}) => {
-  
+const CreateTeam = ({createTeam, history, toClub , club:{ club } }) => {
+
   let currentClub = ''
 
   if (toClub){
@@ -23,7 +24,7 @@ const CreateTeam = ({createTeam, history, club:{ club }, toClub}) => {
     teamNum:'',
     ligueLevel:'',
     ageCategory:'',
-    clubNum:currentClub,
+    clubNum:'',
     coachName:'',
     details :''
 
@@ -56,66 +57,71 @@ const CreateTeam = ({createTeam, history, club:{ club }, toClub}) => {
         <div className="form-group">
         </div>
         <div className="form-group">
-        <small class="form-text">
+        <small className="form-text">
         * Team Name
         </small>
           <input type="text" name="teamName" value={teamName} onChange={e =>onChange(e)} />
         </div>
 
         <div className="form-group">
-        <small class="form-text">
+        <small className="form-text">
         * Team Number
         </small>
           <input type="text" name="teamNum" value={teamNum} onChange={e =>onChange(e)} />
         </div>
 
         <div className="form-group">
-        <small class="form-text">
-        * Team Category
-        </small>
-          <input type="text" name="teamCategory" value={teamCategory} onChange={e =>onChange(e)} />
+        <select name="teamCategory" value={teamCategory} onChange={e =>onChange(e)}>
+                <option>* Select Team Category</option>
+                <option value="1">Men</option>
+                <option value="2">Women</option>
+                <option value="3">Boys</option>
+                <option value="4">Girls</option>
+        </select>
         </div>
 
+        
+
         <div className="form-group">
-        <small class="form-text">
-        Ligue Level
+        <small className="form-text">
+        * Ligue Level
         </small>
           <input type="text" name="ligueLevel" value={ligueLevel} onChange={e =>onChange(e)} />
         </div>
 
         <div className="form-group">
-        <small class="form-text">
-        Age Category
+        <small className="form-text">
+        * Age Category
         </small>
           <input type="text" name="ageCategory" value={ageCategory} onChange={e =>onChange(e)} />
         </div>
         
         {toClub ?
         <div className="form-group">
-        <small class="form-text">
-        Club Number
+        <small className="form-text">
+        * Club Number
         </small>
-          <input type="text" name="clubNum" value={currentClub} readOnly={true}/>
+          <input type="text" name="clubNum" value={currentClub} disabled readOnly={true}/>
         </div>
          :
       
         <div className="form-group">
-        <small class="form-text">
-        Club Number
+        <small className="form-text">
+        * Club Number
         </small>
           <input type="text" name="clubNum" value={clubNum} onChange={e =>onChange(e)} />
         </div>
         }
         
         <div className="form-group">
-        <small class="form-text">
+        <small className="form-text">
         Coach Name
         </small>
-          <input type="Date"  name="coachName" value={coachName} onChange={e =>onChange(e)} />
+          <input type="text"  name="coachName" value={coachName} onChange={e =>onChange(e)} />
         </div>
 
         <div className="form-group">
-        <small class="form-text">
+        <small className="form-text">
         Details
         </small>
           <input type="text" name="details" value={details} onChange={e =>onChange(e)}/>
@@ -123,7 +129,7 @@ const CreateTeam = ({createTeam, history, club:{ club }, toClub}) => {
 
         
 
-        <input type="submit" className="btn btn-primary my-1" />
+        <input type="submit" className="btn btn-primary my-1" value="Create team" />
         <Link className="btn btn-light my-1" to="/teams">Go Back</Link>
       </form>
     </Fragment>
@@ -133,7 +139,9 @@ const CreateTeam = ({createTeam, history, club:{ club }, toClub}) => {
 
 CreateTeam.propTypes = {
   createTeam:PropTypes.func.isRequired,
-  team:PropTypes.object.isRequired
+  getCurrentClub:PropTypes.func.isRequired,
+  team:PropTypes.object.isRequired,
+  club:PropTypes.object.isRequired
 };
 
 const mapStateToProps = state =>({
@@ -141,4 +149,4 @@ const mapStateToProps = state =>({
   club:state.club
 })
 
-export default connect(mapStateToProps, { createTeam })(withRouter(CreateTeam));
+export default connect(mapStateToProps, { createTeam, getCurrentClub })(withRouter(CreateTeam));

@@ -17,7 +17,7 @@ const Login = ({ login, isAuth }) => {
   
   const onSubmit = async e => {
     e.preventDefault();
-    login(email, password);
+    await login(email, password);
   } 
   
   if (isAuth){

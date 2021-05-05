@@ -6,7 +6,6 @@ import {
   GET_TEAMS, 
   CLEAR_TEAM,
   TEAM_ERROR
-  
 } from './types';
 
 // Get My Team //
@@ -32,7 +31,6 @@ export const getMyTeam = () => async dispatch => {
 // Get Team By Id //
 
 export const getCurrentTeam = (teamId) => async dispatch => {
- console.log(teamId);
   try {
     const res = await axios.get(`/sayfan/team/${teamId}`);
     dispatch({
@@ -48,12 +46,13 @@ export const getCurrentTeam = (teamId) => async dispatch => {
   }
 };
 
-// Get All Teams //
+// Get All Teams for club //
 
-export const getAllTeams = () => async dispatch => {
+export const getAllTeams = (teamNum) => async dispatch => {
  
   try {
-    const res = await axios.get('/sayfan/team');
+    const team = await axios.get(`/sayfan/team/me/${teamNum}`);
+    const res = await axios.get(`/sayfan/team/club/${team.data.clubNum}`);
     
     dispatch({
       type:GET_TEAMS,

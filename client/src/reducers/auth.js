@@ -6,8 +6,7 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOG_OUT,
-  DELETE_ACCOUNT
+  LOG_OUT
   } from '../actions/types';
 
   const initialState = {
@@ -35,7 +34,8 @@ import {
         localStorage.setItem('token', payload.token);
         return {
           ...state,
-          ...payload,
+          user:payload.user,
+          
           isAuth:true,
           loading:false          
         }

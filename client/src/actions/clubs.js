@@ -12,7 +12,6 @@ import {
 // Get Club by id //
 
 export const getCurrentClub = (clubId) => async dispatch => {
- 
   try {
     const res = await axios.get(`/sayfan/club/${clubId}`);
 
@@ -20,8 +19,7 @@ export const getCurrentClub = (clubId) => async dispatch => {
       type:GET_CLUB,
       payload: res.data
     });
-
-    
+  
   }catch (err){
     dispatch({
       type:CLUB_ERROR,
@@ -32,14 +30,17 @@ export const getCurrentClub = (clubId) => async dispatch => {
 
 // Get All Clubs //
 
-export const getAllClubs = () => async dispatch => {
+export const getAllClubs = (teamNum) => async dispatch => {
  
   try {
-    const res = await axios.get(`/sayfan/club`);
+
+    const team = await axios.get(`/sayfan/team/me/${teamNum}`);
+    const res = await axios.get(`/sayfan/club//me/${team.data.clubNum}`);
     
+
     dispatch({
       type:GET_CLUBS,
-      payload: res.data
+      payload: [res.data]
     });
   
   }catch (err){

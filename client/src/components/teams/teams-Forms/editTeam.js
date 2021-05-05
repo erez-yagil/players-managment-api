@@ -9,7 +9,6 @@ import { updateTeam } from '../../../actions/teams';
 
 const CreateTeam = ({team:{ loading }, updateTeam, history, teamdata}) => {
 
-  console.log(teamdata)
   
   const [formDate, setFormDate] = useState({
     teamName:'',
@@ -118,7 +117,7 @@ const CreateTeam = ({team:{ loading }, updateTeam, history, teamdata}) => {
 
         
 
-        <input type="submit" className="btn btn-primary my-1" />
+        <input type="submit" className="btn btn-primary my-1" value="Edit team" />
         <Link className="btn btn-light my-1" to="/teams">Go Back</Link>
       </form>
     </Fragment>

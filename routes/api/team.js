@@ -101,12 +101,6 @@ checkSchema({
 // Update Team by id //
 
 router.patch('/:id', async (req, res)=>{
-  // const updates = Object.keys(req.body);
-  // const allowedUpdates = ['teamName', 'teamCategory', 'ligueLevel'];
-  // const isValidUpdate = updates.every((update) =>
-  //   allowedUpdates.includes(update));
-
-  // if (!isValidUpdate) return res.status(400).send('error: Invalid updates')
   
   try{
     const team = await Team.findByIdAndUpdate(req.params.id, req.body, {
@@ -167,18 +161,36 @@ router.get('/', async (req, res)=> {
   }
 });
 
+// Get All Teams By Club Number //
 
-// Get my Team //
-
-router.get('/me', auth, async (req, res)=> {
+router.get('/club/:clubNum', async (req, res)=> {
   try {
-    const teams = await Team.findOne({user:req.user.teamNum});
+    const teams = await Team.find({clubNum:req.params.clubNum});
     
     if (!teams) {
-      return res.status(400).json({ msg: 'There is no teams' })
+      return res.status(400).json({ msg: 'There is no team' })
     }
 
     res.json(teams);
+
+  } catch(error) {
+    console.error(error.message);
+    res.status(500).send('Server Error')
+  }
+});
+
+
+// Get my Team //
+
+router.get('/me/:teamNum', async (req, res)=> {
+  try {
+    const team = await Team.findOne({teamNum:req.params.teamNum});
+    
+    if (!team) {
+      return res.status(400).json({ msg: 'There is no teams' })
+    }
+
+    res.json(team);
 
   } catch(error) {
     console.error(error.message);
@@ -190,7 +202,7 @@ router.get('/me', auth, async (req, res)=> {
 
 router.get('/:id', async (req, res)=> {
   try {
-    const team = await Team.findById(req.params.id);
+    const team = await Team.findOne({_id: req.params.id});
     
     if (!team) {
       return res.status(400).json({ msg: 'There is no teams' })
